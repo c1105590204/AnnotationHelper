@@ -67,7 +67,7 @@ bintray {
         version {
             name = '1.0.5-tuts'
             desc = "decent banner"
-            released = new Date()
+            released = System.currentTimeMillis()
             vcsTag = '1.0.5'
         }
 
