@@ -3,8 +3,7 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.chenyao.annotationutil' // 这里需要和真实包名对应，不能随便填写
-version = '1.0.1' // 指定版本号
-
+version = '1.0.3' // 指定版本号
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -29,6 +28,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'com.android.support:recyclerview-v7:23.2.0'
+    compile files('libs/butterknife-7.0.1.jar')
 }
 
 
@@ -62,13 +62,13 @@ bintray {
 
     pkg {
         repo = 'annotationutils'
-        name = 'com.chenyao.annotationutil'
+        name = 'annotationhelper'
 
         version {
-            name = '1.0.5-tuts'
-            desc = "decent banner"
-            released = System.currentTimeMillis()
-            vcsTag = '1.0.5'
+            name = '1.0.5'
+//            desc = "decent banner"
+//            released = new Date()
+//            vcsTag = '1.0.5'
         }
 
         licenses = ['GPL-3.0']

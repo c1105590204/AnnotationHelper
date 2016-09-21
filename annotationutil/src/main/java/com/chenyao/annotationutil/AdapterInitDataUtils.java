@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,10 +40,11 @@ public class AdapterInitDataUtils {
             try {
                 if (field.isAnnotationPresent(SetText.class)) {
                     SetText setText = field.getAnnotation(SetText.class);
-                    String after = setText.afterStr();
-                    String before = setText.before();
-                    int id = setText.value();
-                    adapterViewHolder.<TextView>getView(id).setText(String.valueOf(before + field.get(e) + after));
+                    setText(setText, field.get(e), adapterViewHolder);
+//                    String after = setText.afterStr();
+//                    String before = setText.before();
+//                    int id = setText.value();
+//                    adapterViewHolder.<TextView>getView(id).setText(String.valueOf(before + field.get(e) + after));
                 } else if (field.isAnnotationPresent(SetImage.class)) {
                     SetImage setImage = field.getAnnotation(SetImage.class);
                     Object object = field.get(e);
@@ -57,20 +59,40 @@ public class AdapterInitDataUtils {
                 if (method.getName().startsWith("get")) {
                     if (method.isAnnotationPresent(SetText.class)) {
                         SetText setText = method.getAnnotation(SetText.class);
-                        int id = setText.value();
-                        String after = setText.afterStr();
-                        String before = setText.before();
-                        adapterViewHolder.<TextView>getView(id).setText(String.valueOf(before + method.invoke(e) + after));
+                        setText(setText, method.invoke(e), adapterViewHolder);
+//                        int id = setText.value();
+//                        String after = setText.afterStr();
+//                        String before = setText.before();
+//                        adapterViewHolder.<TextView>getView(id).setText(String.valueOf(before + method.invoke(e) + after));
                     } else if (method.isAnnotationPresent(SetImage.class)) {
                         SetImage setImage = method.getAnnotation(SetImage.class);
                         Object object = method.invoke(e);
                         glideShow(context, setImage, object, adapterViewHolder);
+                    }
+                } else if (method.getName().startsWith("edit")) {
+                    if (method.isAnnotationPresent(EditView.class)) {
+                        EditView editView = method.getAnnotation(EditView.class);
+                        int id = editView.value();
+                        if (id == -1) {
+                            method.invoke(e, adapterViewHolder.getMainView());
+                        } else if (id == -2) {
+                            method.invoke(e, adapterViewHolder);
+                        } else {
+                            method.invoke(e, adapterViewHolder.getView(id));
+                        }
                     }
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
         }
+    }
+
+    private static void setText(SetText setText, Object object, AdapterViewHolder adapterViewHolder) {
+        String after = setText.afterStr();
+        String before = setText.before();
+        int id = setText.value();
+        adapterViewHolder.<TextView>getView(id).setText(String.valueOf(before + object + after));
     }
 
     private static void glideShow(Object context, SetImage setImage, Object res, AdapterViewHolder adapterViewHolder) {
