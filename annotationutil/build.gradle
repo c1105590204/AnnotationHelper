@@ -70,6 +70,9 @@ bintray {
             released = new Date()
             vcsTag = '1.0.5'
         }
+
+        licenses = ['GPL-3.0']
+        vcsUrl = 'https://github.com/c1105590204/AnnotationHelper.git'
     }
 
     configurations = ['archives']
